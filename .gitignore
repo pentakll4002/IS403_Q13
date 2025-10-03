@@ -97,3 +97,7 @@ cython_debug/
 
 # Local config
 *.local
+
+# Ignore dataset
+data/
+*.csv
