@@ -33,7 +33,7 @@
 | :-- | :------- | :------------------- | :---------------------------------- | :---------------------- |
 | 1   | 23520003 | Đặng Thiên Ân        | https://github.com/pentakll4002     | 23520003@gm.uit.edu.vn  |
 | 2   | 23520403 | Cao Nguyễn Kỳ Dỹ     | https://github.com/DWY4X            | 23520403@gm.uit.edu.vn  |
-| 3   | 23520534 | Thái Bình Dương      | https://github.com/Annv11022005     | 23520022@gm.uit.edu.vn  |
+| 3   | 23520534 | Thái Bình Dương      | https://github.com/DuongThai2712     | 23520356@gm.uit.edu.vn  |
 | 4   | 23521795 | Trần Thanh Huy       | https://github.com/vinhpt003        | 23521795@gm.uit.edu.vn  |
 | 5   | 23521795 | Phạm Công Đoàn       | https://github.com/vinhpt003        | 23521795@gm.uit.edu.vn  |
 
