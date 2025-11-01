@@ -99,5 +99,5 @@ cython_debug/
 *.local
 
 # Ignore dataset
-data/
-*.csv
+# data/
+# *.csv
