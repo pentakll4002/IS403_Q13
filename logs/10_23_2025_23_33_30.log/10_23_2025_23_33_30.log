@@ -1,0 +1,25 @@
+[ 2025-10-23 23:33:44,455 ] 14 root - INFO - Starting training pipeline
+[ 2025-10-23 23:33:44,455 ] 17 root - INFO - Starting data ingestion
+[ 2025-10-23 23:33:44,455 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-10-23 23:33:57,227 ] 30 root - INFO - Read the datasets as dataframe
+[ 2025-10-23 23:34:20,448 ] 34 root - INFO - Train test split initiated
+[ 2025-10-23 23:34:54,464 ] 41 root - INFO - Ingestion of the dataset is completed
+[ 2025-10-23 23:34:55,702 ] 20 root - INFO - Data ingestion completed
+[ 2025-10-23 23:34:55,703 ] 23 root - INFO - Starting data transformation
+[ 2025-10-23 23:34:55,722 ] 136 root - INFO - Starting data transformation process
+[ 2025-10-23 23:35:08,821 ] 142 root - INFO - Train data shape: (1197268, 16)
+[ 2025-10-23 23:35:08,821 ] 143 root - INFO - Test data shape: (299318, 16)
+[ 2025-10-23 23:35:08,821 ] 30 root - INFO - Starting datetime feature extraction
+[ 2025-10-23 23:35:11,912 ] 48 root - INFO - Datetime feature extraction completed successfully
+[ 2025-10-23 23:35:11,912 ] 59 root - INFO - Starting IP address conversion
+[ 2025-10-23 23:35:18,181 ] 70 root - INFO - IP address conversion completed successfully
+[ 2025-10-23 23:35:18,181 ] 81 root - INFO - Starting column dropping
+[ 2025-10-23 23:35:18,473 ] 91 root - INFO - Column dropping completed successfully
+[ 2025-10-23 23:35:18,473 ] 30 root - INFO - Starting datetime feature extraction
+[ 2025-10-23 23:35:19,148 ] 48 root - INFO - Datetime feature extraction completed successfully
+[ 2025-10-23 23:35:19,148 ] 59 root - INFO - Starting IP address conversion
+[ 2025-10-23 23:35:20,852 ] 70 root - INFO - IP address conversion completed successfully
+[ 2025-10-23 23:35:20,852 ] 81 root - INFO - Starting column dropping
+[ 2025-10-23 23:35:20,973 ] 91 root - INFO - Column dropping completed successfully
+[ 2025-10-23 23:35:20,973 ] 108 root - INFO - Starting data transformer object creation
+[ 2025-10-23 23:35:20,973 ] 125 root - INFO - Data transformer object created successfully

@@ -1,0 +1,26 @@
+[ 2025-10-23 23:20:28,053 ] 14 root - INFO - Starting training pipeline
+[ 2025-10-23 23:20:28,053 ] 17 root - INFO - Starting data ingestion
+[ 2025-10-23 23:20:28,053 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-10-23 23:20:41,885 ] 30 root - INFO - Read the datasets as dataframe
+[ 2025-10-23 23:21:07,563 ] 34 root - INFO - Train test split initiated
+[ 2025-10-23 23:21:43,990 ] 41 root - INFO - Ingestion of the dataset is completed
+[ 2025-10-23 23:21:45,110 ] 20 root - INFO - Data ingestion completed
+[ 2025-10-23 23:21:45,110 ] 23 root - INFO - Starting data transformation
+[ 2025-10-23 23:21:45,116 ] 133 root - INFO - Starting data transformation process
+[ 2025-10-23 23:21:57,881 ] 139 root - INFO - Train data shape: (1197268, 16)
+[ 2025-10-23 23:21:57,881 ] 140 root - INFO - Test data shape: (299318, 16)
+[ 2025-10-23 23:21:57,881 ] 30 root - INFO - Starting datetime feature extraction
+[ 2025-10-23 23:22:00,310 ] 48 root - INFO - Datetime feature extraction completed successfully
+[ 2025-10-23 23:22:00,310 ] 59 root - INFO - Starting IP address conversion
+[ 2025-10-23 23:22:06,952 ] 70 root - INFO - IP address conversion completed successfully
+[ 2025-10-23 23:22:06,955 ] 81 root - INFO - Starting column dropping
+[ 2025-10-23 23:22:07,259 ] 91 root - INFO - Column dropping completed successfully
+[ 2025-10-23 23:22:07,259 ] 30 root - INFO - Starting datetime feature extraction
+[ 2025-10-23 23:22:07,914 ] 48 root - INFO - Datetime feature extraction completed successfully
+[ 2025-10-23 23:22:07,914 ] 59 root - INFO - Starting IP address conversion
+[ 2025-10-23 23:22:09,661 ] 70 root - INFO - IP address conversion completed successfully
+[ 2025-10-23 23:22:09,661 ] 81 root - INFO - Starting column dropping
+[ 2025-10-23 23:22:09,789 ] 91 root - INFO - Column dropping completed successfully
+[ 2025-10-23 23:22:09,790 ] 108 root - INFO - Starting data transformer object creation
+[ 2025-10-23 23:22:09,790 ] 122 root - INFO - Data transformer object created successfully
+[ 2025-10-23 23:22:09,979 ] 39 root - ERROR - Error in training pipeline: descriptor '__init__' requires a 'super' object but received a 'ValueError'

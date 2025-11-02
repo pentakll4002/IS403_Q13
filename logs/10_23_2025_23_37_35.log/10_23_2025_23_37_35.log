@@ -1,0 +1,10 @@
+[ 2025-10-23 23:37:38,405 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-10-23 23:37:50,777 ] 30 root - INFO - Read the datasets as dataframe
+[ 2025-10-23 23:38:13,150 ] 34 root - INFO - Train test split initiated
+[ 2025-10-23 23:38:47,518 ] 41 root - INFO - Ingestion of the dataset is completed
+[ 2025-10-23 23:38:58,172 ] 30 root - INFO - Starting datetime feature extraction
+[ 2025-10-23 23:39:00,829 ] 48 root - INFO - Datetime feature extraction completed successfully
+[ 2025-10-23 23:39:00,829 ] 59 root - INFO - Starting IP address conversion
+[ 2025-10-23 23:39:07,710 ] 70 root - INFO - IP address conversion completed successfully
+[ 2025-10-23 23:39:07,714 ] 81 root - INFO - Starting column dropping
+[ 2025-10-23 23:39:08,015 ] 91 root - INFO - Column dropping completed successfully
