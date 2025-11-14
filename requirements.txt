@@ -16,4 +16,8 @@ azure-ml-api-sdk
 jupyterlab
 dill
 umap-learn
-
+xgboost
+jupyter
+requests
+osmium
+aiohttp
