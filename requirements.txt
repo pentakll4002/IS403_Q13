@@ -7,3 +7,17 @@ scikit-learn
 scipy
 kneed
 category_encoders
+azureml-core
+azureml-mlflow
+mlflow
+catboost
+azure-storage-blob
+azure-ml-api-sdk
+jupyterlab
+dill
+umap-learn
+xgboost
+jupyter
+requests
+osmium
+aiohttp
