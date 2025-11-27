@@ -139,6 +139,10 @@ class DataTransformation:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
             
+            # Strip whitespace from column names to avoid KeyError issues
+            train_df.columns = train_df.columns.str.strip()
+            test_df.columns = test_df.columns.str.strip()
+            
             logging.info(f"Train data shape: {train_df.shape}")
             logging.info(f"Test data shape: {test_df.shape}")
             
@@ -151,6 +155,14 @@ class DataTransformation:
             test_df = self.convert_ip_to_int(test_df)
             test_df = self.drop_unnecessary_columns(test_df)
             
+            # Only drop the original 'Transaction Hour' (with spaces), not the engineered 'Transaction_Hour'
+            for df in [train_df, test_df]:
+                to_drop = [col for col in df.columns if col.strip() == 'Transaction Hour']
+                if to_drop:
+                    df.drop(columns=to_drop, inplace=True)
+
+            logging.info(f"Columns in train_df before splitting: {train_df.columns.tolist()}")
+            logging.info(f"Columns in test_df before splitting: {test_df.columns.tolist()}")
             # Get preprocessing object
             preprocessing_obj = self.get_data_transformer_object()
             

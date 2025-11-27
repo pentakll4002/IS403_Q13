@@ -1,0 +1,28 @@
+[ 2025-11-17 22:24:45,250 ] 14 root - INFO - Starting training pipeline
+[ 2025-11-17 22:24:45,250 ] 17 root - INFO - Starting data ingestion
+[ 2025-11-17 22:24:45,250 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-11-17 22:24:51,798 ] 30 root - INFO - Read the datasets as dataframe
+[ 2025-11-17 22:25:03,941 ] 34 root - INFO - Train test split initiated
+[ 2025-11-17 22:25:20,240 ] 41 root - INFO - Ingestion of the dataset is completed
+[ 2025-11-17 22:25:20,873 ] 20 root - INFO - Data ingestion completed
+[ 2025-11-17 22:25:20,873 ] 23 root - INFO - Starting data transformation
+[ 2025-11-17 22:25:20,890 ] 109 root - INFO - Starting data transformation process
+[ 2025-11-17 22:25:27,321 ] 119 root - INFO - Train data shape: (1197268, 16)
+[ 2025-11-17 22:25:27,321 ] 120 root - INFO - Test data shape: (299318, 16)
+[ 2025-11-17 22:25:27,321 ] 31 root - INFO - Starting datetime feature extraction
+[ 2025-11-17 22:25:28,621 ] 49 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-17 22:25:28,621 ] 60 root - INFO - Starting IP address conversion
+[ 2025-11-17 22:25:32,209 ] 71 root - INFO - IP address conversion completed successfully
+[ 2025-11-17 22:25:32,209 ] 82 root - INFO - Starting column dropping
+[ 2025-11-17 22:25:32,352 ] 92 root - INFO - Column dropping completed successfully
+[ 2025-11-17 22:25:32,352 ] 31 root - INFO - Starting datetime feature extraction
+[ 2025-11-17 22:25:32,680 ] 49 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-17 22:25:32,680 ] 60 root - INFO - Starting IP address conversion
+[ 2025-11-17 22:25:33,573 ] 71 root - INFO - IP address conversion completed successfully
+[ 2025-11-17 22:25:33,573 ] 82 root - INFO - Starting column dropping
+[ 2025-11-17 22:25:33,620 ] 92 root - INFO - Column dropping completed successfully
+[ 2025-11-17 22:25:33,715 ] 137 root - INFO - Columns in train_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend', 'IP_Int']
+[ 2025-11-17 22:25:33,715 ] 138 root - INFO - Columns in test_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend', 'IP_Int']
+[ 2025-11-17 22:25:39,172 ] 161 root - INFO - Data transformation completed successfully
+[ 2025-11-17 22:25:39,256 ] 28 root - INFO - Data transformation completed
+[ 2025-11-17 22:25:39,256 ] 31 root - INFO - Starting model training

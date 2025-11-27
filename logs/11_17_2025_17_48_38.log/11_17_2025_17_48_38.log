@@ -1,0 +1,30 @@
+[ 2025-11-17 17:48:50,968 ] 14 root - INFO - Starting training pipeline
+[ 2025-11-17 17:48:50,968 ] 17 root - INFO - Starting data ingestion
+[ 2025-11-17 17:48:50,968 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-11-17 17:49:30,810 ] 30 root - INFO - Read the datasets as dataframe
+[ 2025-11-17 17:50:41,541 ] 34 root - INFO - Train test split initiated
+[ 2025-11-17 17:51:59,903 ] 41 root - INFO - Ingestion of the dataset is completed
+[ 2025-11-17 17:52:01,873 ] 20 root - INFO - Data ingestion completed
+[ 2025-11-17 17:52:01,873 ] 23 root - INFO - Starting data transformation
+[ 2025-11-17 17:52:01,873 ] 136 root - INFO - Starting data transformation process
+[ 2025-11-17 17:52:31,916 ] 146 root - INFO - Train data shape: (1197268, 16)
+[ 2025-11-17 17:52:31,916 ] 147 root - INFO - Test data shape: (299318, 16)
+[ 2025-11-17 17:52:31,916 ] 30 root - INFO - Starting datetime feature extraction
+[ 2025-11-17 17:52:38,671 ] 48 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-17 17:52:38,671 ] 59 root - INFO - Starting IP address conversion
+[ 2025-11-17 17:52:58,188 ] 70 root - INFO - IP address conversion completed successfully
+[ 2025-11-17 17:52:58,188 ] 81 root - INFO - Starting column dropping
+[ 2025-11-17 17:52:58,810 ] 91 root - INFO - Column dropping completed successfully
+[ 2025-11-17 17:52:58,810 ] 30 root - INFO - Starting datetime feature extraction
+[ 2025-11-17 17:53:00,611 ] 48 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-17 17:53:00,611 ] 59 root - INFO - Starting IP address conversion
+[ 2025-11-17 17:53:05,494 ] 70 root - INFO - IP address conversion completed successfully
+[ 2025-11-17 17:53:05,494 ] 81 root - INFO - Starting column dropping
+[ 2025-11-17 17:53:05,716 ] 91 root - INFO - Column dropping completed successfully
+[ 2025-11-17 17:53:06,161 ] 163 root - INFO - Columns in train_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend', 'IP_Int']
+[ 2025-11-17 17:53:06,161 ] 164 root - INFO - Columns in test_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend', 'IP_Int']
+[ 2025-11-17 17:53:06,161 ] 108 root - INFO - Starting data transformer object creation
+[ 2025-11-17 17:53:06,161 ] 125 root - INFO - Data transformer object created successfully
+[ 2025-11-17 17:53:06,495 ] 39 root - ERROR - Error in training pipeline: Error occured in python script name [C:\IS403\src\components\data_transformation.py]
+line number [178]
+error_message [A given column is not a column of the dataframe]

@@ -22,7 +22,7 @@ class CustomException(Exception):
         )
 
     def __str__(self):
-        return self.error_message
+        return '\n'.join(self.error_message) if isinstance(self.error_message, tuple) else str(self.error_message)
 
 if __name__=="__main__":
     try:
