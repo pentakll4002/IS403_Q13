@@ -9,10 +9,10 @@ from ..exception import CustomException
 
 from dataclasses import dataclass
 from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-import category_encoders as ce
+from category_encoders import TargetEncoder
+
+from ..utils import save_object
 
 @dataclass
 class DataTransformationConfig:
@@ -21,6 +21,8 @@ class DataTransformationConfig:
 class DataTransformation:
     def __init__(self):
         self.data_transformation_config = DataTransformationConfig()
+        self.high_card_categorical = ["Customer Location"]
+        self.small_categorical = ["Payment Method", "Product Category", "Device Used"]
 
     def extract_datetime_features(self, df):
         """
@@ -52,26 +54,7 @@ class DataTransformation:
             raise CustomException(e, sys)
     
     def convert_ip_to_int(self, df):
-        """
-        Convert IP Address to integer format
-        """
-        try:
-            logging.info("Starting IP address conversion")
-            
-            def ip_to_int(ip):
-                try:
-                    return int(ipaddress.ip_address(ip))
-                except:
-                    return None
-            
-            df['IP_Int'] = df['IP Address'].apply(ip_to_int)
-            df.drop(columns=["IP Address"], inplace=True)
-            
-            logging.info("IP address conversion completed successfully")
-            return df
-            
-        except Exception as e:
-            raise CustomException(e, sys)
+        return df
     
     def drop_unnecessary_columns(self, df):
         """
@@ -81,10 +64,11 @@ class DataTransformation:
             logging.info("Starting column dropping")
             
             cols_to_drop = [
-                "Transaction ID", 
-                "Customer ID", 
-                "Shipping Address", 
-                "Billing Address"
+                "Transaction ID",
+                "Customer ID",
+                "Shipping Address",
+                "Billing Address",
+                "IP Address",
             ]
             df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
             
@@ -94,32 +78,28 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
     
-    def get_categorical_features(self):
-        """
-        Return list of categorical features
-        """
-        return ["Payment Method", "Product Category", "Customer Location", "Device Used"]
+    def get_numeric_features(self, df):
+        numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns.tolist()
+        numeric_cols = [col for col in numeric_cols if col not in ["Is Fraudulent"]]
+        return numeric_cols
     
-    def get_data_transformer_object(self):
+    def get_data_transformer_object(self, df):
         """
         This function is responsible for data transformation pipeline
         """
         try:
             logging.info("Starting data transformer object creation")
             
-            categorical_features = self.get_categorical_features()
+            numeric_features = self.get_numeric_features(df)
             
             # Create preprocessing pipeline
             preprocessor = ColumnTransformer(
                 transformers=[
-                    ('cat', OneHotEncoder(drop='first', sparse_output=False), categorical_features),
-                    ('num', StandardScaler(), ['Transaction Amount', 'Quantity', 'Customer Age', 
-                                               'Account Age Days', 'Transaction_Year',
-                                               'Transaction_Month', 'Transaction_Day', 'Transaction_Hour',
-                                               'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek',
-                                               'Is_Weekend', 'IP_Int'])
+                    ("target", TargetEncoder(min_samples_leaf=10, smoothing=30), self.high_card_categorical),
+                    ("ohe", OneHotEncoder(handle_unknown="ignore", sparse_output=False), self.small_categorical),
+                    ("scale", StandardScaler(), numeric_features),
                 ],
-                remainder='passthrough'
+                remainder="drop"
             )
             
             logging.info("Data transformer object created successfully")
@@ -164,9 +144,9 @@ class DataTransformation:
             logging.info(f"Columns in train_df before splitting: {train_df.columns.tolist()}")
             logging.info(f"Columns in test_df before splitting: {test_df.columns.tolist()}")
             # Get preprocessing object
-            preprocessing_obj = self.get_data_transformer_object()
+            preprocessing_obj = self.get_data_transformer_object(train_df)
             
-            target_column_name = 'Transaction Amount'
+            target_column_name = 'Is Fraudulent'
             
             # Separate features and target
             input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
@@ -176,18 +156,21 @@ class DataTransformation:
             target_feature_test_df = test_df[target_column_name]
             
             # Apply preprocessing
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
+            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df, target_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
             
-            # Combine features and target
-            train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
-            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
+            save_object(
+                self.data_transformation_config.preprocessor_obj_file_path,
+                preprocessing_obj
+            )
             
             logging.info("Data transformation completed successfully")
             
             return (
-                train_arr,
-                test_arr,
+                input_feature_train_arr,
+                input_feature_test_arr,
+                np.array(target_feature_train_df),
+                np.array(target_feature_test_df),
                 self.data_transformation_config.preprocessor_obj_file_path
             )
             

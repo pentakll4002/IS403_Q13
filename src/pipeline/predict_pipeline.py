@@ -1,5 +1,6 @@
 import sys
-import pandas as pd 
+import pandas as pd
+import numpy as np
 from datetime import datetime
 
 from ..exception import CustomException
@@ -16,11 +17,29 @@ class PredictPipeline:
             preprocessor_path = 'artifacts/preprocessor.pkl'
             model = load_object(file_path=model_path)
             preprocessor = load_object(file_path=preprocessor_path)
-            data_scaled = preprocessor.transform(features)
-            preds = model.predict(data_scaled)
-            return preds
+            processed_features = self._prepare_features(features, preprocessor)
+            preds = model.predict(processed_features)
+            probas = model.predict_proba(processed_features)[:, 1]
+            return preds, probas
         except Exception as e:
             raise CustomException(e, sys)
+    
+    def _prepare_features(self, df, preprocessor):
+        try:
+            df = df.copy()
+            df['Transaction Date'] = pd.to_datetime(df['Transaction Date'], errors='coerce')
+            df['Transaction_Year'] = df['Transaction Date'].dt.year
+            df['Transaction_Month'] = df['Transaction Date'].dt.month
+            df['Transaction_Day'] = df['Transaction Date'].dt.day
+            df['Transaction_Hour'] = df['Transaction Date'].dt.hour
+            df['Transaction_Minute'] = df['Transaction Date'].dt.minute
+            df['Transaction_Second'] = df['Transaction Date'].dt.second
+            df['Transaction_DayOfWeek'] = df['Transaction Date'].dt.dayofweek
+            df['Is_Weekend'] = df['Transaction_DayOfWeek'].apply(lambda x: 1 if x >= 5 else 0)
+            df.drop(columns=["Transaction Date"], inplace=True)
+            return preprocessor.transform(df)
+        except Exception as prep_error:
+            raise CustomException(prep_error, sys)
         
 
 class CustomData:
@@ -35,7 +54,6 @@ class CustomData:
         customer_location: str,
         device_used: str,
         transaction_date: str,
-        ip_address: str
     ):
         self.transaction_amount = transaction_amount
         self.quantity = quantity
@@ -46,7 +64,6 @@ class CustomData:
         self.customer_location = customer_location
         self.device_used = device_used
         self.transaction_date = transaction_date
-        self.ip_address = ip_address
 
     def get_data_as_data_frame(self):
         try:
@@ -59,8 +76,7 @@ class CustomData:
                 "Product Category": [self.product_category],
                 "Customer Location": [self.customer_location],
                 "Device Used": [self.device_used],
-                "Transaction Date": [self.transaction_date],
-                "IP Address": [self.ip_address]
+                "Transaction Date": [self.transaction_date]
             }
 
             return pd.DataFrame(custom_data_input_dict)

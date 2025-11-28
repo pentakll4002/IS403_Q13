@@ -1,0 +1,36 @@
+[ 2025-11-28 18:11:56,219 ] 23 root - INFO - Starting training pipeline
+[ 2025-11-28 18:11:56,220 ] 28 root - INFO - Starting data ingestion
+[ 2025-11-28 18:11:56,220 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-11-28 18:11:56,221 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data.csv
+[ 2025-11-28 18:12:25,058 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data_2.csv
+[ 2025-11-28 18:12:25,837 ] 42 root - INFO - Successfully concatenated fraud datasets
+[ 2025-11-28 18:12:26,506 ] 45 root - INFO - Dropped IP Address column as requested
+[ 2025-11-28 18:13:30,480 ] 49 root - INFO - Train test split initiated
+[ 2025-11-28 18:14:49,931 ] 56 root - INFO - Ingestion of the dataset is completed
+[ 2025-11-28 18:14:51,979 ] 30 root - INFO - Data ingestion completed
+[ 2025-11-28 18:14:51,979 ] 32 root - INFO - Starting data transformation
+[ 2025-11-28 18:14:51,979 ] 116 root - INFO - Starting data transformation process
+[ 2025-11-28 18:15:19,574 ] 126 root - INFO - Train data shape: (1197268, 15)
+[ 2025-11-28 18:15:19,589 ] 127 root - INFO - Test data shape: (299318, 15)
+[ 2025-11-28 18:15:19,589 ] 32 root - INFO - Starting datetime feature extraction
+[ 2025-11-28 18:15:26,344 ] 50 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-28 18:15:26,345 ] 64 root - INFO - Starting column dropping
+[ 2025-11-28 18:15:26,963 ] 75 root - INFO - Column dropping completed successfully
+[ 2025-11-28 18:15:26,963 ] 32 root - INFO - Starting datetime feature extraction
+[ 2025-11-28 18:15:28,667 ] 50 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-28 18:15:28,667 ] 64 root - INFO - Starting column dropping
+[ 2025-11-28 18:15:28,856 ] 75 root - INFO - Column dropping completed successfully
+[ 2025-11-28 18:15:29,260 ] 144 root - INFO - Columns in train_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend']
+[ 2025-11-28 18:15:29,260 ] 145 root - INFO - Columns in test_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend']
+[ 2025-11-28 18:15:29,260 ] 91 root - INFO - Starting data transformer object creation
+[ 2025-11-28 18:15:29,415 ] 105 root - INFO - Data transformer object created successfully
+[ 2025-11-28 18:15:43,390 ] 20 root - INFO - Saved object to artifacts\preprocessor.pkl
+[ 2025-11-28 18:15:43,391 ] 167 root - INFO - Data transformation completed successfully
+[ 2025-11-28 18:15:43,624 ] 42 root - INFO - Data transformation completed
+[ 2025-11-28 18:15:43,624 ] 44 root - INFO - Starting model training
+[ 2025-11-28 18:15:43,625 ] 35 root - INFO - Starting model training for fraud classification
+[ 2025-11-28 18:16:14,868 ] 40 root - INFO - Model fitting completed
+[ 2025-11-28 18:16:17,581 ] 20 root - INFO - Saved object to artifacts\model.pkl
+[ 2025-11-28 18:16:17,581 ] 54 root - INFO - Persisted trained classifier to artifacts\model.pkl
+[ 2025-11-28 18:16:17,581 ] 49 root - INFO - Classification metrics: {'accuracy': 0.9517135621646543, 'precision': 0.5941394408891882, 'recall': 0.11750599520383694, 'f1_score': 0.19620710750236361, 'roc_auc': 0.6785952482166693}
+[ 2025-11-28 18:16:45,068 ] 71 root - INFO - Training pipeline completed successfully

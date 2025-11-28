@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Performance Prediction</title>
+    <title>Fraud Transaction Prediction</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -91,61 +91,66 @@
         <form method="POST" action="/predict">
             <div class="form-group">
                 <label for="transaction_amount">Transaction Amount:</label>
-                <input type="number" id="transaction_amount" name="transaction_amount" step="0.01" required>
+                <input type="number" id="transaction_amount" name="transaction_amount" step="0.01" required value="{{ form_data.transaction_amount if form_data else '' }}">
             </div>
             <div class="form-group">
                 <label for="payment_method">Payment Method:</label>
                 <select id="payment_method" name="payment_method" required>
                     <option value="">Select Payment Method</option>
-                    <option value="debit card">Debit Card</option>
-                    <option value="credit card">Credit Card</option>
-                    <option value="bank transfer">Bank Transfer</option>
+                    <option value="debit card" {% if form_data and form_data.payment_method == 'debit card' %}selected{% endif %}>Debit Card</option>
+                    <option value="credit card" {% if form_data and form_data.payment_method == 'credit card' %}selected{% endif %}>Credit Card</option>
+                    <option value="bank transfer" {% if form_data and form_data.payment_method == 'bank transfer' %}selected{% endif %}>Bank Transfer</option>
+                    <option value="mobile wallet" {% if form_data and form_data.payment_method == 'mobile wallet' %}selected{% endif %}>Mobile Wallet</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="product_category">Product Category:</label>
                 <select id="product_category" name="product_category" required>
                     <option value="">Select Category</option>
-                    <option value="health & beauty">Health & Beauty</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="toys & games">Toys & Games</option>
-                    <option value="home & garden">Home & Garden</option>
+                    <option value="health & beauty" {% if form_data and form_data.product_category == 'health & beauty' %}selected{% endif %}>Health & Beauty</option>
+                    <option value="electronics" {% if form_data and form_data.product_category == 'electronics' %}selected{% endif %}>Electronics</option>
+                    <option value="toys & games" {% if form_data and form_data.product_category == 'toys & games' %}selected{% endif %}>Toys & Games</option>
+                    <option value="home & garden" {% if form_data and form_data.product_category == 'home & garden' %}selected{% endif %}>Home & Garden</option>
+                    <option value="fashion" {% if form_data and form_data.product_category == 'fashion' %}selected{% endif %}>Fashion</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" min="1" required>
+                <input type="number" id="quantity" name="quantity" min="1" required value="{{ form_data.quantity if form_data else '' }}">
             </div>
             <div class="form-group">
                 <label for="customer_age">Customer Age:</label>
-                <input type="number" id="customer_age" name="customer_age" min="10" max="99" required>
+                <input type="number" id="customer_age" name="customer_age" min="10" max="99" required value="{{ form_data.customer_age if form_data else '' }}">
             </div>
             <div class="form-group">
                 <label for="customer_location">Customer Location:</label>
-                <input type="text" id="customer_location" name="customer_location" required>
+                <input type="text" id="customer_location" name="customer_location" required value="{{ form_data.customer_location if form_data else '' }}">
             </div>
             <div class="form-group">
                 <label for="device_used">Device Used:</label>
                 <select id="device_used" name="device_used" required>
                     <option value="">Select Device</option>
-                    <option value="desktop">Desktop</option>
-                    <option value="mobile">Mobile</option>
-                    <option value="tablet">Tablet</option>
+                    <option value="desktop" {% if form_data and form_data.device_used == 'desktop' %}selected{% endif %}>Desktop</option>
+                    <option value="mobile" {% if form_data and form_data.device_used == 'mobile' %}selected{% endif %}>Mobile</option>
+                    <option value="tablet" {% if form_data and form_data.device_used == 'tablet' %}selected{% endif %}>Tablet</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="account_age_days">Account Age (days):</label>
-                <input type="number" id="account_age_days" name="account_age_days" min="0" required>
+                <input type="number" id="account_age_days" name="account_age_days" min="0" required value="{{ form_data.account_age_days if form_data else '' }}">
             </div>
             <div class="form-group">
-                <label for="transaction_hour">Transaction Hour (0-23):</label>
-                <input type="number" id="transaction_hour" name="transaction_hour" min="0" max="23" required>
+                <label for="transaction_date">Transaction Date & Time:</label>
+                <input type="datetime-local" id="transaction_date" name="transaction_date" required value="{{ form_data.transaction_date if form_data else '' }}">
             </div>
             <button type="submit" class="btn">Predict Fraud</button>
         </form>
         {% if results %}
         <div class="result">
             <h3>Fraud Prediction: {{ results }}</h3>
+            {% if probability is not none %}
+            <p>Fraud Probability: <strong>{{ probability }}</strong></p>
+            {% endif %}
         </div>
         {% endif %}
         <a href="/" class="back-link">← Back to Home</a>
