@@ -22,3 +22,4 @@ requests
 osmium
 aiohttp
 lightgbm
+imblearn

@@ -31,26 +31,26 @@ class TrainPipeline:
 
             logging.info("Starting data transformation")
             (
-                X_train,
-                X_test,
-                y_train,
-                y_test,
+                train_df,
+                test_df,
+                preprocessor,
                 preprocessor_path,
             ) = data_transformation.initiate_data_transformation(
                 train_data_path, test_data_path
             )
-            logging.info("Data transformation completed")
+            logging.info("Data transformation (feature engineering) completed")
 
-            logging.info("Starting model training")
+            logging.info("Starting model training with ImbPipeline")
             trainer_output = model_trainer.initiate_model_trainer(
-                X_train, X_test, y_train, y_test
+                train_df, test_df, preprocessor
             )
             metrics = trainer_output["metrics"]
             logging.info(f"Classification metrics: {metrics}")
 
-            with mlflow.start_run(run_name="fraud_classification_by_rf"):
-                mlflow.set_tag("model_type", "XGBoost")
-                mlflow.log_params(model_trainer.model.get_params())
+            with mlflow.start_run(run_name="fraud_classification_by_lgbm"):
+                mlflow.set_tag("model_type", "LightGBM")
+                pipeline_params = model_trainer.pipeline.get_params()
+                mlflow.log_params(pipeline_params)
                 for metric_name, value in metrics.items():
                     mlflow.log_metric(metric_name, float(value))
 
@@ -58,7 +58,7 @@ class TrainPipeline:
                     mlflow.log_artifact(preprocessor_path, artifact_path="preprocessor")
 
                 mlflow.sklearn.log_model(
-                    sk_model=model_trainer.model,
+                    sk_model=model_trainer.pipeline,
                     artifact_path="model",
                 )
 

@@ -143,34 +143,25 @@ class DataTransformation:
 
             logging.info(f"Columns in train_df before splitting: {train_df.columns.tolist()}")
             logging.info(f"Columns in test_df before splitting: {test_df.columns.tolist()}")
-            # Get preprocessing object
+            
+            # Get preprocessing object (not fitted yet)
             preprocessing_obj = self.get_data_transformer_object(train_df)
             
-            target_column_name = 'Is Fraudulent'
-            
-            # Separate features and target
-            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
-            target_feature_train_df = train_df[target_column_name]
-            
-            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)
-            target_feature_test_df = test_df[target_column_name]
-            
-            # Apply preprocessing
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df, target_feature_train_df)
-            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
-            
+            # Save preprocessor object for later use
             save_object(
                 self.data_transformation_config.preprocessor_obj_file_path,
                 preprocessing_obj
             )
             
-            logging.info("Data transformation completed successfully")
+            logging.info("Data transformation (feature engineering) completed successfully")
+            logging.info("Returning raw DataFrames and preprocessor object for ImbPipeline")
             
+            # Return raw DataFrames and preprocessor object (not fitted)
+            # Model trainer will create ImbPipeline and fit it
             return (
-                input_feature_train_arr,
-                input_feature_test_arr,
-                np.array(target_feature_train_df),
-                np.array(target_feature_test_df),
+                train_df,
+                test_df,
+                preprocessing_obj,
                 self.data_transformation_config.preprocessor_obj_file_path
             )
             

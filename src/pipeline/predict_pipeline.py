@@ -13,20 +13,29 @@ class PredictPipeline:
     
     def predict(self, features):
         try:
-            model_path = 'artifacts/model.pkl'
-            preprocessor_path = 'artifacts/preprocessor.pkl'
-            model = load_object(file_path=model_path)
-            preprocessor = load_object(file_path=preprocessor_path)
-            processed_features = self._prepare_features(features, preprocessor)
-            preds = model.predict(processed_features)
-            probas = model.predict_proba(processed_features)[:, 1]
+            pipeline_path = 'artifacts/model.pkl'
+            pipeline = load_object(file_path=pipeline_path)
+            prepared_features = self._prepare_features(features)
+            # Pipeline automatically handles preprocessing (no SMOTE for prediction)
+            preds = pipeline.predict(prepared_features)
+            probas = pipeline.predict_proba(prepared_features)[:, 1]
             return preds, probas
         except Exception as e:
             raise CustomException(e, sys)
     
-    def _prepare_features(self, df, preprocessor):
+    def _prepare_features(self, df):
+        """
+        Prepare features by applying same feature engineering as in data_transformation
+        (datetime extraction, column dropping, etc.)
+        Pipeline will handle preprocessing (encoding, scaling)
+        """
         try:
             df = df.copy()
+            
+            # Strip whitespace from column names
+            df.columns = df.columns.str.strip()
+            
+            # Extract datetime features (same as data_transformation)
             df['Transaction Date'] = pd.to_datetime(df['Transaction Date'], errors='coerce')
             df['Transaction_Year'] = df['Transaction Date'].dt.year
             df['Transaction_Month'] = df['Transaction Date'].dt.month
@@ -37,7 +46,23 @@ class PredictPipeline:
             df['Transaction_DayOfWeek'] = df['Transaction Date'].dt.dayofweek
             df['Is_Weekend'] = df['Transaction_DayOfWeek'].apply(lambda x: 1 if x >= 5 else 0)
             df.drop(columns=["Transaction Date"], inplace=True)
-            return preprocessor.transform(df)
+            
+            # Drop unnecessary columns (same as data_transformation)
+            cols_to_drop = [
+                "Transaction ID",
+                "Customer ID",
+                "Shipping Address",
+                "Billing Address",
+                "IP Address",
+            ]
+            df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
+            
+            # Drop original 'Transaction Hour' if exists
+            to_drop = [col for col in df.columns if col.strip() == 'Transaction Hour']
+            if to_drop:
+                df.drop(columns=to_drop, inplace=True)
+            
+            return df
         except Exception as prep_error:
             raise CustomException(prep_error, sys)
         

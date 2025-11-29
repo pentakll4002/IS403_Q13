@@ -1,0 +1,42 @@
+[ 2025-11-29 12:29:21,532 ] 23 root - INFO - Starting training pipeline
+[ 2025-11-29 12:29:21,532 ] 28 root - INFO - Starting data ingestion
+[ 2025-11-29 12:29:21,532 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-11-29 12:29:21,532 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data.csv
+[ 2025-11-29 12:29:28,558 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data_2.csv
+[ 2025-11-29 12:29:28,795 ] 42 root - INFO - Successfully concatenated fraud datasets
+[ 2025-11-29 12:29:29,059 ] 45 root - INFO - Dropped IP Address column as requested
+[ 2025-11-29 12:29:41,290 ] 49 root - INFO - Train test split initiated
+[ 2025-11-29 12:29:59,187 ] 56 root - INFO - Ingestion of the dataset is completed
+[ 2025-11-29 12:29:59,848 ] 30 root - INFO - Data ingestion completed
+[ 2025-11-29 12:29:59,848 ] 32 root - INFO - Starting data transformation
+[ 2025-11-29 12:29:59,848 ] 116 root - INFO - Starting data transformation process
+[ 2025-11-29 12:30:06,295 ] 126 root - INFO - Train data shape: (1197268, 15)
+[ 2025-11-29 12:30:06,295 ] 127 root - INFO - Test data shape: (299318, 15)
+[ 2025-11-29 12:30:06,295 ] 32 root - INFO - Starting datetime feature extraction
+[ 2025-11-29 12:30:07,781 ] 50 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-29 12:30:07,781 ] 64 root - INFO - Starting column dropping
+[ 2025-11-29 12:30:07,963 ] 75 root - INFO - Column dropping completed successfully
+[ 2025-11-29 12:30:07,964 ] 32 root - INFO - Starting datetime feature extraction
+[ 2025-11-29 12:30:08,353 ] 50 root - INFO - Datetime feature extraction completed successfully
+[ 2025-11-29 12:30:08,353 ] 64 root - INFO - Starting column dropping
+[ 2025-11-29 12:30:08,424 ] 75 root - INFO - Column dropping completed successfully
+[ 2025-11-29 12:30:08,528 ] 144 root - INFO - Columns in train_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend']
+[ 2025-11-29 12:30:08,528 ] 145 root - INFO - Columns in test_df before splitting: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction_Year', 'Transaction_Month', 'Transaction_Day', 'Transaction_Hour', 'Transaction_Minute', 'Transaction_Second', 'Transaction_DayOfWeek', 'Is_Weekend']
+[ 2025-11-29 12:30:08,528 ] 91 root - INFO - Starting data transformer object creation
+[ 2025-11-29 12:30:08,569 ] 105 root - INFO - Data transformer object created successfully
+[ 2025-11-29 12:30:08,572 ] 20 root - INFO - Saved object to artifacts\preprocessor.pkl
+[ 2025-11-29 12:30:08,572 ] 156 root - INFO - Data transformation (feature engineering) completed successfully
+[ 2025-11-29 12:30:08,572 ] 157 root - INFO - Returning raw DataFrames and preprocessor object for ImbPipeline
+[ 2025-11-29 12:30:08,572 ] 41 root - INFO - Data transformation (feature engineering) completed
+[ 2025-11-29 12:30:08,572 ] 43 root - INFO - Starting model training with ImbPipeline
+[ 2025-11-29 12:30:08,572 ] 43 root - INFO - Starting model training with ImbPipeline for fraud classification
+[ 2025-11-29 12:30:08,644 ] 54 root - INFO - Train data shape: (1197268, 16)
+[ 2025-11-29 12:30:08,644 ] 55 root - INFO - Test data shape: (299318, 16)
+[ 2025-11-29 12:30:08,644 ] 58 root - INFO - Creating ImbPipeline with preprocessor, SMOTE, and model
+[ 2025-11-29 12:30:08,644 ] 67 root - INFO - Fitting ImbPipeline on training data
+[ 2025-11-29 12:30:20,655 ] 69 root - INFO - ImbPipeline fitting completed
+[ 2025-11-29 12:30:20,655 ] 72 root - INFO - Predicting on test data
+[ 2025-11-29 12:30:21,854 ] 20 root - INFO - Saved object to artifacts\model.pkl
+[ 2025-11-29 12:30:21,854 ] 85 root - INFO - Persisted trained pipeline to artifacts\model.pkl
+[ 2025-11-29 12:30:21,875 ] 48 root - INFO - Classification metrics: {'accuracy': 0.9309096011599703, 'precision': 0.28003725551071096, 'recall': 0.24034106048494538, 'f1_score': 0.2586750788643533, 'roc_auc': 0.6485296652198689}
+[ 2025-11-29 12:30:28,417 ] 72 root - INFO - Training pipeline completed successfully
