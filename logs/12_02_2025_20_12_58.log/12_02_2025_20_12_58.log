@@ -1,0 +1,36 @@
+[ 2025-12-02 20:12:59,091 ] 24 root - INFO - Starting training pipeline
+[ 2025-12-02 20:12:59,091 ] 29 root - INFO - Starting data ingestion
+[ 2025-12-02 20:12:59,091 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-12-02 20:12:59,091 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data.csv
+[ 2025-12-02 20:13:05,437 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data_2.csv
+[ 2025-12-02 20:13:05,658 ] 42 root - INFO - Successfully concatenated fraud datasets
+[ 2025-12-02 20:13:05,890 ] 45 root - INFO - Dropped IP Address column as requested
+[ 2025-12-02 20:13:17,539 ] 49 root - INFO - Train test split initiated
+[ 2025-12-02 20:13:33,580 ] 56 root - INFO - Ingestion of the dataset is completed
+[ 2025-12-02 20:13:34,378 ] 31 root - INFO - Data ingestion completed
+[ 2025-12-02 20:13:34,378 ] 33 root - INFO - Starting data transformation
+[ 2025-12-02 20:13:34,378 ] 146 root - INFO - Starting data transformation process
+[ 2025-12-02 20:13:40,713 ] 154 root - INFO - Train data shape: (1197268, 15)
+[ 2025-12-02 20:13:40,713 ] 155 root - INFO - Test data shape: (299318, 15)
+[ 2025-12-02 20:13:40,713 ] 157 root - INFO - Applying feature engineering like notebook (train)
+[ 2025-12-02 20:13:43,942 ] 162 root - INFO - Applying feature engineering like notebook (test)
+[ 2025-12-02 20:13:44,977 ] 170 root - INFO - Columns in train_df before preprocessing object: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction Hour', 'Address_Mismatch', 'Transaction_Weekday', 'Transaction_Hour', 'Customer_Frequency', 'Amount_Higher_Than_Average']
+[ 2025-12-02 20:13:44,977 ] 173 root - INFO - Columns in test_df before preprocessing object: ['Transaction Amount', 'Payment Method', 'Product Category', 'Quantity', 'Customer Age', 'Customer Location', 'Device Used', 'Is Fraudulent', 'Account Age Days', 'Transaction Hour', 'Address_Mismatch', 'Transaction_Weekday', 'Transaction_Hour', 'Customer_Frequency', 'Amount_Higher_Than_Average']
+[ 2025-12-02 20:13:44,977 ] 91 root - INFO - Starting data transformer object creation (linear + tree)
+[ 2025-12-02 20:13:45,526 ] 131 root - INFO - Data transformer objects created successfully (preprocessor_linear + preprocessor_tree). Returning preprocessor_linear as default.
+[ 2025-12-02 20:13:45,542 ] 20 root - INFO - Saved object to artifacts\preprocessor.pkl
+[ 2025-12-02 20:13:45,542 ] 184 root - INFO - Data transformation (feature engineering) completed successfully
+[ 2025-12-02 20:13:45,542 ] 185 root - INFO - Returning raw DataFrames and preprocessor object for ImbPipeline
+[ 2025-12-02 20:13:45,558 ] 42 root - INFO - Data transformation (feature engineering) completed
+[ 2025-12-02 20:13:45,558 ] 44 root - INFO - Starting Logistic Regression training with ImbPipeline
+[ 2025-12-02 20:13:45,558 ] 57 root - INFO - Starting model training with ImbPipeline for fraud classification
+[ 2025-12-02 20:13:45,622 ] 68 root - INFO - Train data shape: (1196831, 14)
+[ 2025-12-02 20:13:45,622 ] 69 root - INFO - Test data shape: (299225, 14)
+[ 2025-12-02 20:13:45,622 ] 71 root - INFO - Creating ImbPipeline with preprocessor, SMOTE, and LogisticRegression
+[ 2025-12-02 20:13:45,622 ] 82 root - INFO - Fitting ImbPipeline on training data
+[ 2025-12-02 20:16:22,257 ] 84 root - INFO - ImbPipeline fitting completed
+[ 2025-12-02 20:16:22,257 ] 87 root - INFO - Predicting on test data
+[ 2025-12-02 20:16:30,357 ] 20 root - INFO - Saved object to artifacts\model.pkl
+[ 2025-12-02 20:16:30,357 ] 100 root - INFO - Persisted trained pipeline to artifacts\model.pkl
+[ 2025-12-02 20:16:30,395 ] 49 root - INFO - Classification metrics: {'accuracy': 0.8433319408471885, 'precision': 0.18726819600070646, 'recall': 0.6359456217512994, 'f1_score': 0.28933525354354583, 'roc_auc': 0.7815168462537334}
+[ 2025-12-02 20:16:37,566 ] 72 root - INFO - Training pipeline completed successfully

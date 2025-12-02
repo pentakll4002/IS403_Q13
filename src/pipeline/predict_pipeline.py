@@ -25,8 +25,13 @@ class PredictPipeline:
     
     def _prepare_features(self, df):
         """
-        Prepare features by applying same feature engineering as in data_transformation
-        (datetime extraction, column dropping, etc.)
+        Prepare features by applying same feature engineering as in DataTransformation:
+        - lọc age > 0
+        - Address_Mismatch
+        - Transaction_Weekday, Transaction_Hour
+        - Customer_Frequency, Amount_Higher_Than_Average sẽ được model xử lý theo
+          thống kê đã học trên train (mapping được "đóng" trong preprocessor/pipeline)
+        - drop các cột ID / address / IP / Transaction Date
         Pipeline will handle preprocessing (encoding, scaling)
         """
         try:
@@ -35,16 +40,20 @@ class PredictPipeline:
             # Strip whitespace from column names
             df.columns = df.columns.str.strip()
             
-            # Extract datetime features (same as data_transformation)
-            df['Transaction Date'] = pd.to_datetime(df['Transaction Date'], errors='coerce')
-            df['Transaction_Year'] = df['Transaction Date'].dt.year
-            df['Transaction_Month'] = df['Transaction Date'].dt.month
-            df['Transaction_Day'] = df['Transaction Date'].dt.day
-            df['Transaction_Hour'] = df['Transaction Date'].dt.hour
-            df['Transaction_Minute'] = df['Transaction Date'].dt.minute
-            df['Transaction_Second'] = df['Transaction Date'].dt.second
-            df['Transaction_DayOfWeek'] = df['Transaction Date'].dt.dayofweek
-            df['Is_Weekend'] = df['Transaction_DayOfWeek'].apply(lambda x: 1 if x >= 5 else 0)
+            # Lọc Customer Age > 0 giống notebook
+            df = df[df["Customer Age"] > 0]
+
+            # Address mismatch
+            df["Address_Mismatch"] = (
+                df["Shipping Address"] != df["Billing Address"]
+            ).astype(int)
+
+            # Datetime -> weekday & hour giống notebook
+            df["Transaction Date"] = pd.to_datetime(
+                df["Transaction Date"], errors="coerce"
+            )
+            df["Transaction_Weekday"] = df["Transaction Date"].dt.dayofweek
+            df["Transaction_Hour"] = df["Transaction Date"].dt.hour
             df.drop(columns=["Transaction Date"], inplace=True)
             
             # Drop unnecessary columns (same as data_transformation)
@@ -56,11 +65,6 @@ class PredictPipeline:
                 "IP Address",
             ]
             df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
-            
-            # Drop original 'Transaction Hour' if exists
-            to_drop = [col for col in df.columns if col.strip() == 'Transaction Hour']
-            if to_drop:
-                df.drop(columns=to_drop, inplace=True)
             
             return df
         except Exception as prep_error:

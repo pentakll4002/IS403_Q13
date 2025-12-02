@@ -24,57 +24,57 @@ class DataTransformation:
         self.high_card_categorical = ["Customer Location"]
         self.small_categorical = ["Payment Method", "Product Category", "Device Used"]
 
-    def extract_datetime_features(self, df):
-        """
-        Extract datetime features from Transaction Date column
-        """
+    def _engineer_features(
+        self,
+        df: pd.DataFrame,
+        customer_freq: dict | None = None,
+        avg_amount_per_cat: pd.Series | None = None,
+        is_train: bool = True,
+    ):
         try:
-            logging.info("Starting datetime feature extraction")
-            
-            # Convert Transaction Date to datetime
-            df['Transaction Date'] = pd.to_datetime(df['Transaction Date'], errors='coerce')
-            
-            # Extract datetime features
-            df['Transaction_Year'] = df['Transaction Date'].dt.year
-            df['Transaction_Month'] = df['Transaction Date'].dt.month
-            df['Transaction_Day'] = df['Transaction Date'].dt.day
-            df['Transaction_Hour'] = df['Transaction Date'].dt.hour
-            df['Transaction_Minute'] = df['Transaction Date'].dt.minute
-            df['Transaction_Second'] = df['Transaction Date'].dt.second
-            df['Transaction_DayOfWeek'] = df['Transaction Date'].dt.dayofweek  
-            df['Is_Weekend'] = df['Transaction_DayOfWeek'].apply(lambda x: 1 if x >= 5 else 0)
-            
-            # Drop original Transaction Date column
-            df.drop(columns=["Transaction Date"], inplace=True)
-            
-            logging.info("Datetime feature extraction completed successfully")
-            return df
-            
-        except Exception as e:
-            raise CustomException(e, sys)
-    
-    def convert_ip_to_int(self, df):
-        return df
-    
-    def drop_unnecessary_columns(self, df):
-        """
-        Drop columns that are not needed for model training
-        """
-        try:
-            logging.info("Starting column dropping")
-            
+            df = df.copy()
+
+            df = df[df["Customer Age"] > 0]
+
+            df["Address_Mismatch"] = (
+                df["Shipping Address"] != df["Billing Address"]
+            ).astype(int)
+
+            df["Transaction Date"] = pd.to_datetime(
+                df["Transaction Date"], errors="coerce"
+            )
+            df["Transaction_Weekday"] = df["Transaction Date"].dt.dayofweek
+            df["Transaction_Hour"] = df["Transaction Date"].dt.hour
+
+            if is_train:
+                customer_freq = df["Customer ID"].value_counts().to_dict()
+            if customer_freq is not None:
+                df["Customer_Frequency"] = df["Customer ID"].map(customer_freq).fillna(
+                    0
+                )
+
+            if is_train:
+                avg_amount_per_cat = (
+                    df.groupby("Product Category")["Transaction Amount"].mean()
+                )
+            if avg_amount_per_cat is not None:
+                df["Amount_Higher_Than_Average"] = (
+                    df["Transaction Amount"]
+                    > df["Product Category"].map(avg_amount_per_cat)
+                ).astype(int)
+
             cols_to_drop = [
                 "Transaction ID",
                 "Customer ID",
                 "Shipping Address",
                 "Billing Address",
                 "IP Address",
+                "Transaction Date",
             ]
-            df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
-            
-            logging.info("Column dropping completed successfully")
-            return df
-            
+            df.drop(columns=cols_to_drop, inplace=True, errors="ignore")
+
+            return df, customer_freq, avg_amount_per_cat
+
         except Exception as e:
             raise CustomException(e, sys)
     
@@ -88,23 +88,53 @@ class DataTransformation:
         This function is responsible for data transformation pipeline
         """
         try:
-            logging.info("Starting data transformer object creation")
-            
+            logging.info("Starting data transformer object creation (linear + tree)")
+
+            # Numeric features (same cho cả 2 preprocessor)
             numeric_features = self.get_numeric_features(df)
-            
-            # Create preprocessing pipeline
-            preprocessor = ColumnTransformer(
+
+            categorical_cols = df.select_dtypes(include=["object"]).columns.tolist()
+            cat_low = [c for c in categorical_cols if df[c].nunique() < 50]
+            cat_high = [c for c in categorical_cols if df[c].nunique() >= 50]
+
+            preprocessor_linear = ColumnTransformer(
                 transformers=[
-                    ("target", TargetEncoder(min_samples_leaf=10, smoothing=30), self.high_card_categorical),
-                    ("ohe", OneHotEncoder(handle_unknown="ignore", sparse_output=False), self.small_categorical),
+                    (
+                        "target",
+                        TargetEncoder(min_samples_leaf=10, smoothing=30),
+                        cat_high,
+                    ),
+                    ("ohe", OneHotEncoder(handle_unknown="ignore"), cat_low),
                     ("scale", StandardScaler(), numeric_features),
                 ],
-                remainder="drop"
+                remainder="drop",
             )
+
+            preprocessor_tree = ColumnTransformer(
+                transformers=[
+                    (
+                        "target",
+                        TargetEncoder(min_samples_leaf=10, smoothing=30),
+                        cat_high,
+                    ),
+                    (
+                        "ohe",
+                        OneHotEncoder(handle_unknown="ignore", sparse_output=False),
+                        cat_low,
+                    ),
+                ],
+                remainder="passthrough",
+            )
+            self.preprocessor_linear = preprocessor_linear
+            self.preprocessor_tree = preprocessor_tree
+
+            logging.info(
             
-            logging.info("Data transformer object created successfully")
-            return preprocessor
-            
+                "Data transformer objects created successfully "
+                "(preprocessor_linear + preprocessor_tree). "
+                "Returning preprocessor_linear as default."
+            )
+            return preprocessor_tree
         except Exception as e:
             raise CustomException(e, sys)
     
@@ -115,39 +145,37 @@ class DataTransformation:
         try:
             logging.info("Starting data transformation process")
             
-            # Read train and test data
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
             
-            # Strip whitespace from column names to avoid KeyError issues
             train_df.columns = train_df.columns.str.strip()
             test_df.columns = test_df.columns.str.strip()
             
             logging.info(f"Train data shape: {train_df.shape}")
             logging.info(f"Test data shape: {test_df.shape}")
             
-            # Apply transformations
-            train_df = self.extract_datetime_features(train_df)
-            train_df = self.convert_ip_to_int(train_df)
-            train_df = self.drop_unnecessary_columns(train_df)
-            
-            test_df = self.extract_datetime_features(test_df)
-            test_df = self.convert_ip_to_int(test_df)
-            test_df = self.drop_unnecessary_columns(test_df)
-            
-            # Only drop the original 'Transaction Hour' (with spaces), not the engineered 'Transaction_Hour'
-            for df in [train_df, test_df]:
-                to_drop = [col for col in df.columns if col.strip() == 'Transaction Hour']
-                if to_drop:
-                    df.drop(columns=to_drop, inplace=True)
+            logging.info("Applying feature engineering like notebook (train)")
+            train_df, customer_freq, avg_amount_per_cat = self._engineer_features(
+                train_df, is_train=True
+            )
 
-            logging.info(f"Columns in train_df before splitting: {train_df.columns.tolist()}")
-            logging.info(f"Columns in test_df before splitting: {test_df.columns.tolist()}")
+            logging.info("Applying feature engineering like notebook (test)")
+            test_df, _, _ = self._engineer_features(
+                test_df,
+                customer_freq=customer_freq,
+                avg_amount_per_cat=avg_amount_per_cat,
+                is_train=False,
+            )
+
+            logging.info(
+                f"Columns in train_df before preprocessing object: {train_df.columns.tolist()}"
+            )
+            logging.info(
+                f"Columns in test_df before preprocessing object: {test_df.columns.tolist()}"
+            )
             
-            # Get preprocessing object (not fitted yet)
             preprocessing_obj = self.get_data_transformer_object(train_df)
             
-            # Save preprocessor object for later use
             save_object(
                 self.data_transformation_config.preprocessor_obj_file_path,
                 preprocessing_obj
@@ -156,8 +184,6 @@ class DataTransformation:
             logging.info("Data transformation (feature engineering) completed successfully")
             logging.info("Returning raw DataFrames and preprocessor object for ImbPipeline")
             
-            # Return raw DataFrames and preprocessor object (not fitted)
-            # Model trainer will create ImbPipeline and fit it
             return (
                 train_df,
                 test_df,

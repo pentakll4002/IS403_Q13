@@ -1,0 +1,11 @@
+[('prep', ColumnTransformer(remainder='passthrough',
+                  transformers=[('target',
+                                 TargetEncoder(min_samples_leaf=10,
+                                               smoothing=30),
+                                 ['Customer Location']),
+                                ('ohe',
+                                 OneHotEncoder(handle_unknown='ignore',
+                                               sparse_output=False),
+                                 ['Payment Method', 'Product Category',
+                                  'Device Used'])])), ('smote', SMOTE(random_state=42, sampling_strategy=1.0)), ('clf', DecisionTreeClassifier(max_depth=10, max_features='sqrt', min_samples_leaf=4,
+                       min_samples_split=10))]

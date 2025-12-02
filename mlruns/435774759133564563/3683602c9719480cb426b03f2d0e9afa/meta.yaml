@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/IS403/mlruns/435774759133564563/3683602c9719480cb426b03f2d0e9afa/artifacts
+deleted_time: 1764672671616
+end_time: 1764672034718
+entry_point_name: ''
+experiment_id: '435774759133564563'
+lifecycle_stage: deleted
+run_id: 3683602c9719480cb426b03f2d0e9afa
+run_name: fraud_classification_LogisticRegression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764671998319
+status: 3
+tags: []
+user_id: dangt

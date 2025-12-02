@@ -11,6 +11,7 @@ from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
 from src.logger import logging
 
+
 class TrainPipeline:
     def __init__(self, tracking_uri="file:./mlruns", experiment_name="FraudDetection"):
         self.tracking_uri = tracking_uri
@@ -40,15 +41,15 @@ class TrainPipeline:
             )
             logging.info("Data transformation (feature engineering) completed")
 
-            logging.info("Starting model training with ImbPipeline")
+            logging.info("Starting Logistic Regression training with ImbPipeline")
             trainer_output = model_trainer.initiate_model_trainer(
                 train_df, test_df, preprocessor
             )
             metrics = trainer_output["metrics"]
             logging.info(f"Classification metrics: {metrics}")
 
-            with mlflow.start_run(run_name="fraud_classification_by_lgbm"):
-                mlflow.set_tag("model_type", "LightGBM")
+            with mlflow.start_run(run_name="fraud_classification_random_forest"):
+                mlflow.set_tag("model_type", "RandomForest")
                 pipeline_params = model_trainer.pipeline.get_params()
                 mlflow.log_params(pipeline_params)
                 for metric_name, value in metrics.items():

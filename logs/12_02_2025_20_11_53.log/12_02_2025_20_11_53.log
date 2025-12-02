@@ -1,0 +1,7 @@
+[ 2025-12-02 20:11:54,367 ] 26 root - INFO - Enter the data ingestion method or component
+[ 2025-12-02 20:11:54,367 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data.csv
+[ 2025-12-02 20:12:00,651 ] 38 root - INFO - Reading dataset: data/Fraudulent_E-Commerce_Transaction_Data_2.csv
+[ 2025-12-02 20:12:00,892 ] 42 root - INFO - Successfully concatenated fraud datasets
+[ 2025-12-02 20:12:01,182 ] 45 root - INFO - Dropped IP Address column as requested
+[ 2025-12-02 20:12:18,222 ] 49 root - INFO - Train test split initiated
+[ 2025-12-02 20:12:34,498 ] 56 root - INFO - Ingestion of the dataset is completed

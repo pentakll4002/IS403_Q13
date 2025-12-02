@@ -1,8 +1,9 @@
 artifact_uri: file:///C:/IS403/mlruns/435774759133564563/4f1c8a39e34c4bf0b7516cebb8789052/artifacts
+deleted_time: 1764672671626
 end_time: 1764393622366
 entry_point_name: ''
 experiment_id: '435774759133564563'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: 4f1c8a39e34c4bf0b7516cebb8789052
 run_name: fraud_classification_by_rf
 source_name: ''

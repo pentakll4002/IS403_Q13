@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/IS403/mlruns/435774759133564563/5102d159b5894d2ea3132e5d071b2303/artifacts
+end_time: 1764693185557
+entry_point_name: ''
+experiment_id: '435774759133564563'
+lifecycle_stage: active
+run_id: 5102d159b5894d2ea3132e5d071b2303
+run_name: fraud_classification_random_forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764693179695
+status: 3
+tags: []
+user_id: dangt

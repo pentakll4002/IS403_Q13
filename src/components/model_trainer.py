@@ -5,12 +5,18 @@ import numpy as np
 
 from dataclasses import dataclass
 
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+)
 from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.over_sampling import SMOTE
 
@@ -18,21 +24,21 @@ from ..exception import CustomException
 from ..logger import logging
 from ..utils import save_object
 
+
 @dataclass
 class ModelTrainerConfig:
     trained_model_file_path = os.path.join("artifacts", "model.pkl")
 
+
 class ModelTrainer:
     def __init__(self):
         self.config = ModelTrainerConfig()
-        self.model = LGBMClassifier(
-            num_leaves=127,
-            max_depth=10,
-            learning_rate=0.01,
-            n_estimators=800,
-            subsample=0.7,
-            colsample_bytree=1.0,
-            scale_pos_weight=5
+        self.model = RandomForestClassifier(
+            n_estimators=100,
+            max_depth=5,
+            min_samples_split=5,
+            min_samples_leaf=4,
+            max_features='sqrt'
         )
 
     def initiate_model_trainer(self, train_df, test_df, preprocessor):
@@ -58,11 +64,12 @@ class ModelTrainer:
             logging.info(f"Train data shape: {X_train.shape}")
             logging.info(f"Test data shape: {X_test.shape}")
             
-            # Create ImbPipeline with preprocessor + SMOTE + model
-            logging.info("Creating ImbPipeline with preprocessor, SMOTE, and model")
+            logging.info(
+                "Creating ImbPipeline with preprocessor, SMOTE, and LogisticRegression"
+            )
             self.pipeline = ImbPipeline([
                 ("prep", preprocessor),
-                ("smote", SMOTE(sampling_strategy=0.2, k_neighbors=5, random_state=42)),
+                ("smote", SMOTE(sampling_strategy="auto", k_neighbors=5, random_state=42)),
                 ("clf", self.model)
             ])
             

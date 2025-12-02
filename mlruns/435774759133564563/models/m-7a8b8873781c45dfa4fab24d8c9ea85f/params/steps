@@ -1,0 +1,13 @@
+[('prep', ColumnTransformer(transformers=[('target',
+                                 TargetEncoder(min_samples_leaf=10,
+                                               smoothing=30),
+                                 ['Customer Location']),
+                                ('ohe', OneHotEncoder(handle_unknown='ignore'),
+                                 ['Payment Method', 'Product Category',
+                                  'Device Used']),
+                                ('scale', StandardScaler(),
+                                 ['Transaction Amount', 'Quantity',
+                                  'Customer Age', 'Account Age Days',
+                                  'Transaction Hour', 'Address_Mismatch',
+                                  'Customer_Frequency',
+                                  'Amount_Higher_Than_Average'])])), ('smote', SMOTE(random_state=42, sampling_strategy=1.0)), ('clf', LogisticRegression(class_weight='balanced', max_iter=2000, n_jobs=-1))]
